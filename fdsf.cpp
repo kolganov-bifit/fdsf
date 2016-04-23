@@ -74,12 +74,13 @@ static cpp_dec_float_50 get_negative_value(const cpp_dec_float_50 x, const cpp_d
     const size_t N_base = 4;
     cpp_dec_float_50 S1 = 0, S2 = 0;
     cpp_dec_float_50 I_negative;
+    cpp_dec_float_50 y = log(1 + exp(x));
 
     for (int n = 0; n < N_base + 1; n++) {
-        S1 = S1 + a_k1[n]*pow(y0, n + 1);
+        S1 = S1 + a_k1[n]*pow(y, n + 1);
     }
     for (int m = 0; m < N_base; m++) {
-        S2 = S2 + b_k1[m]*pow(y0, m + 1);
+        S2 = S2 + b_k1[m]*pow(y, m + 1);
     }
 
     I_negative = (1 + S1) / (1 + S2);
@@ -120,9 +121,10 @@ cpp_dec_float_50 fdsf::integer::fd_3(cpp_dec_float_50 x)
 
 cpp_dec_float_50 fdsf::integer::fd_4(const cpp_dec_float_50 x)
 {
-    const cpp_dec_float_50 I_1_0 = fdsf::I_k_0[1], I_3_0 = fdsf::I_k_0[3];
+    const cpp_dec_float_50 I_1_0 = PI*PI / 12.0;
+    const cpp_dec_float_50 I_3_0 = 7 * PI*PI*PI*PI / 120;
     const int k = 4;
 
     cpp_dec_float_50 I_4_minus_x = get_negative_value(-x, k);
-    return;
+    return x*x*x*x*x/5 + 8*x*x*x*I_1_0 + 8*x*I_3_0 + I_4_minus_x;
 }
