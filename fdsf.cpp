@@ -56,7 +56,7 @@ namespace fdsf {
         return boost::math::tgamma(k + 1)*y*pow(I_negative, k);
     }
 
-    bmp_real integer::fermi_dirak_k1(const bmp_real x)
+    bmp_real fermi_dirak_k1(const bmp_real x)
     {
         using namespace constants;
         const int k = 1;
@@ -76,7 +76,7 @@ namespace fdsf {
         return x*x / 2 + 2 * I_1_0 - I_1_minus_x;
     }
 
-    bmp_real integer::fermi_dirak_k2(const bmp_real x)
+    bmp_real fermi_dirak_k2(const bmp_real x)
     {
         using namespace constants;
         const int k = 2;
@@ -96,7 +96,7 @@ namespace fdsf {
         return x*x*x / 3 + 4 * x*I_1_0 + I_2_minus_x;
     }
 
-    bmp_real integer::fermi_dirak_k3(const bmp_real x)
+    bmp_real fermi_dirak_k3(const bmp_real x)
     {
         using namespace constants;
 
@@ -117,7 +117,7 @@ namespace fdsf {
         return x*x*x*x / 4 + 6 * x*x*I_1_0 + 2 * I_3_0 - I_3_minus_x;
     }
 
-    bmp_real integer::fermi_dirak_k4(const bmp_real x)
+    bmp_real fermi_dirak_k4(const bmp_real x)
     {
         using namespace constants;
 
