@@ -36,29 +36,26 @@ namespace fdsf {
                                        const constants::mp_coefficients& a,
                                        const constants::mp_coefficients& b)
     {
-
         const size_t N_base = 4;
         bmp_real S1 = 0, S2 = 0;
-        bmp_real I_negative;
         bmp_real y = log(1 + exp(x));
-
-        using namespace constants;
 
         for (int n = 0; n < N_base + 1; n++) {
             S1 = S1 + a[n] * pow(y, n + 1);
         }
+
         for (int m = 0; m < N_base; m++) {
             S2 = S2 + b[m] * pow(y, m + 1);
         }
 
-        I_negative = (1 + S1) / (1 + S2);
+        bmp_real I_negative = (1 + S1) / (1 + S2);
+
         // возвращаем значение аппроксимации согласно формуле (14) в статье
-        return boost::math::tgamma(k + 1)*y*pow(I_negative, k);
+        return boost::math::tgamma(k + 1) * y * pow(I_negative, k);
     }
 
     bmp_real fermi_dirak_k1(const bmp_real x)
     {
-        using namespace constants;
         const int k = 1;
         const mp_coefficients a = { 0.2715113138214362780964488,
                                     0.0562661238060587633169245,
@@ -71,14 +68,16 @@ namespace fdsf {
                                     0.0003669081577365413477999,
                                     0.0000610424408732720110769 };
 
-        bmp_real I_1_minus_x = get_negative_value(-x, k, a, b);
-
-        return x*x / 2 + 2 * I_1_0 - I_1_minus_x;
+        if (x < 0) {
+            return get_negative_value(x, k, a, b);
+        }
+        else {
+            return x * x / 2 + 2 * I_1_0 - get_negative_value(-x, k, a, b);
+        }
     }
 
     bmp_real fermi_dirak_k2(const bmp_real x)
     {
-        using namespace constants;
         const int k = 2;
         const mp_coefficients a = { 0.2263816364340698560028783,
                                     0.0533684335574798857246766,
@@ -91,15 +90,17 @@ namespace fdsf {
                                     0.0006290985326433190105734,
                                     0.0000657018161945458806177 };
 
-        bmp_real I_2_minus_x = get_negative_value(-x, k, a, b);
-
-        return x*x*x / 3 + 4 * x*I_1_0 + I_2_minus_x;
+        if (x < 0) {
+            return get_negative_value(x, k, a, b);
+        }
+        else {
+            return pow(x, 3) / 3 + 4 * x * I_1_0 + 
+                   get_negative_value(-x, k, a, b);
+        }
     }
 
     bmp_real fermi_dirak_k3(const bmp_real x)
     {
-        using namespace constants;
-
         const int k = 3;
         const mp_coefficients a = { 0.1583482145380455955096383,
                                     0.0460645149909308107878344,
@@ -112,15 +113,18 @@ namespace fdsf {
                                     0.0003285431094547362504004,
                                     0.0000820910787890062715299 };
 
-        bmp_real I_3_minus_x = get_negative_value(-x, k, a, b);
-
-        return x*x*x*x / 4 + 6 * x*x*I_1_0 + 2 * I_3_0 - I_3_minus_x;
+        if (x < 0) {
+            return get_negative_value(x, k, a, b);
+        }
+        else {
+            return pow(x, 4) / 4 + 6 * x * x * I_1_0 + 2 * I_3_0 - 
+                   get_negative_value(-x, k, a, b);
+        }
+        
     }
 
     bmp_real fermi_dirak_k4(const bmp_real x)
     {
-        using namespace constants;
-
         const int k = 4;
 
         const mp_coefficients a = { 0.0560148791230902149024568,
@@ -134,7 +138,12 @@ namespace fdsf {
                                     -0.0007512148294307540141223,
                                      0.0000860680747142919882956 };
 
-        bmp_real I_4_minus_x = get_negative_value(-x, k, a, b);
-        return x*x*x*x*x / 5 + 8 * x*x*x*I_1_0 + 8 * x*I_3_0 + I_4_minus_x;
+        if (x < 0) {
+            return get_negative_value(-x, k, a, b);
+        }
+        else {
+            return pow(x, 5) / 5 + 8 * pow(x, 3) * I_1_0 + 8 * x * I_3_0 +
+                   get_negative_value(-x, k, a, b);
+        }
     }
 }
